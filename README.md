@@ -14,4 +14,4 @@
 
 ## 环境变量
 
-- VP_CLIENT_PY3 : 0/1 使用 python3 运行
+- VIPER_CLIENT_PY3 : 0/1 使用 python3 运行

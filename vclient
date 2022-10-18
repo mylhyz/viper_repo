@@ -9,13 +9,13 @@ base_dir=$(dirname "$0")
 # standalone, but allow other PATH manipulations to take priority.
 PATH=$PATH:$base_dir
 
-if [[ $VP_CLIENT_PY3 == 1 ]]; then
+if [[ $VIPER_CLIENT_PY3 == 1 ]]; then
   # Explicitly run on Python 3
-  PYTHONDONTWRITEBYTECODE=1 exec vpython3 "$base_dir/vpclient.py" "$@"
-elif [[ $VP_CLIENT_PY3 == 0 ]]; then
+  PYTHONDONTWRITEBYTECODE=1 exec vpython3 "$base_dir/vclient.py" "$@"
+elif [[ $VIPER_CLIENT_PY3 == 0 ]]; then
   # Explicitly run on Python 2
-  PYTHONDONTWRITEBYTECODE=1 exec vpython "$base_dir/vpclient.py" "$@"
+  PYTHONDONTWRITEBYTECODE=1 exec vpython "$base_dir/vclient.py" "$@"
 else
   # Run on Python 3, allows default to be flipped.
-  PYTHONDONTWRITEBYTECODE=1 exec vpython3 "$base_dir/vpclient.py" "$@"
+  PYTHONDONTWRITEBYTECODE=1 exec vpython3 "$base_dir/vclient.py" "$@"
 fi
