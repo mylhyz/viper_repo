@@ -6,6 +6,12 @@
 
 核心代码拷贝自 https://chromium.googlesource.com/chromium/tools/depot_tools.git
 
+## 存储
+
 使用 github 的 Packages 功能存储产物（由于只对 maven 比较熟悉，因此使用其的 apache maven 功能存储）
 
 可以参考 https://www.npmjs.com/package/maven-deploy 通过 mvn 来实现上传
+
+## 环境变量
+
+- VP_CLIENT_PY3 : 0/1 使用 python3 运行
