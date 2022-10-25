@@ -11,6 +11,7 @@ import json
 import subcommand
 import subprocess2
 import vclient_utils
+import vclient_eval
 
 __version__ = '0.0.1'
 
@@ -25,7 +26,15 @@ def CMDsync(parser, args):
                       help='force update even for unchanged modules')
     (options, args) = parser.parse_args(args)
 
-    # TODO
+    # 首先解析依赖文件
+    deps_content = None
+    deps_file = os.path.join(os.getcwd(), 'DEPS.py')
+    if os.path.isfile(deps_file):
+        deps_content = vclient_utils.FileRead(deps_file)
+    local_scope = {}
+    if deps_content:
+        local_scope = vclient_eval.Parse(deps_content, deps_file)
+    print(local_scope)
 
     return 0
 
