@@ -26,6 +26,7 @@ import tempfile
 import threading
 import time
 import subprocess2
+import zipfile
 
 if sys.version_info.major == 2:
     from cStringIO import StringIO
@@ -37,6 +38,11 @@ else:
     from io import StringIO
     import queue
     import urllib.parse as urlparse
+
+try:
+    import urllib2 as urllib
+except ImportError:  # For Py3 compatibility
+    import urllib.request as urllib
 
 
 # Git wrapper retries on a transient error, and some callees do retries too,
@@ -1371,3 +1377,38 @@ class FrozenDict(collections_abc.Mapping):
 
     def __repr__(self):
         return 'FrozenDict(%r)' % (self._d.items(),)
+
+
+# ###############  定制工具 ####################
+# 解压缩
+def Unzip(file_path, target_path):
+    # 解压缩到 target_path
+    zip_file = zipfile.ZipFile(file_path)
+    print(target_path)
+    for name in zip_file.namelist():
+        if name.endswith('/'):
+            continue
+        if name.startswith("dist/"):
+            dist_file = os.path.join(target_path, name[5:])
+            (file_dir, _) = os.path.split(dist_file)
+            if not os.path.exists(file_dir):
+                os.makedirs(file_dir)
+            f = open(dist_file, 'wb')
+            f.write(zip_file.read(name))
+            f.close()
+    zip_file.close()
+
+# 下载文件
+def Download(url, target_file):
+    if os.path.exists(target_file):
+        return target_file
+    u = urllib.urlopen(url)
+    tmp_file = target_file+'.tmp'
+    with open(tmp_file, 'wb') as f:
+        while True:
+            buf = u.read(4096)
+            if not buf:
+                break
+            f.write(buf)
+    os.rename(tmp_file, target_file)
+    return target_file

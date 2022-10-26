@@ -12,8 +12,6 @@ import subcommand
 import subprocess2
 import vclient_utils
 import vclient_eval
-import vclient_downloader
-import vclient_zip
 
 __version__ = '0.0.1'
 
@@ -56,12 +54,12 @@ def CMDsync(parser, args):
         ver = strs[2]
         dep_url = sync_url+name+'_'+arch+"/"+ver+"/dist.zip"
         cache_file = os.path.join(cache_dir, name+'_'+arch+'_'+ver+'.zip')
-        cache_file = vclient_downloader.Download(
+        cache_file = vclient_utils.Download(
             dep_url, cache_file)
         target_cxx_modules_dir = os.path.join(cxx_modules_dir, name, arch)
         if not os.path.exists(target_cxx_modules_dir):
             os.makedirs(target_cxx_modules_dir)
-        vclient_zip.Unzip(cache_file, target_cxx_modules_dir)
+        vclient_utils.Unzip(cache_file, target_cxx_modules_dir)
 
     return 0
 
