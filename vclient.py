@@ -63,7 +63,7 @@ def CMDsync(parser, args):
         target_cxx_modules_dir = os.path.join(cxx_modules_dir, name, arch)
         if not os.path.exists(target_cxx_modules_dir):
             os.makedirs(target_cxx_modules_dir)
-        vclient_utils.Unzip(cache_file, target_cxx_modules_dir, 'dist/')
+        vclient_utils.Unzip(cache_file, target_cxx_modules_dir, 'dist')
 
     for mod in third_party:
         strs = mod.split('|')
