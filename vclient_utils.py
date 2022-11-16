@@ -1381,15 +1381,15 @@ class FrozenDict(collections_abc.Mapping):
 
 # ###############  定制工具 ####################
 # 解压缩
-def Unzip(file_path, target_path):
+def Unzip(file_path, target_path, folder_prefix='dist/'):
     # 解压缩到 target_path
     zip_file = zipfile.ZipFile(file_path)
     print(target_path)
     for name in zip_file.namelist():
         if name.endswith('/'):
             continue
-        if name.startswith("dist/"):
-            dist_file = os.path.join(target_path, name[5:])
+        if name.startswith(folder_prefix):
+            dist_file = os.path.join(target_path, name[len(folder_prefix)+1:])
             (file_dir, _) = os.path.split(dist_file)
             if not os.path.exists(file_dir):
                 os.makedirs(file_dir)
@@ -1397,6 +1397,7 @@ def Unzip(file_path, target_path):
             f.write(zip_file.read(name))
             f.close()
     zip_file.close()
+
 
 # 下载文件
 def Download(url, target_file):

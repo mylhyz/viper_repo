@@ -37,15 +37,19 @@ def CMDsync(parser, args):
 
     print(local_scope)
 
-    deps = local_scope['deps']
     sync_url = local_scope['sync_url']
+    deps = local_scope['deps']
+    third_party = local_scope['third_party']
 
-    cxx_modules_dir = os.path.join(os.getcwd(), 'cxx_modules')
-    if not os.path.exists(cxx_modules_dir):
-        os.mkdir(cxx_modules_dir)
     cache_dir = os.path.join(os.getcwd(), '.cache')
     if not os.path.exists(cache_dir):
         os.mkdir(cache_dir)
+    cxx_modules_dir = os.path.join(os.getcwd(), 'cxx_modules')
+    if not os.path.exists(cxx_modules_dir):
+        os.mkdir(cxx_modules_dir)
+    third_party_dir = os.path.join(os.getcwd(), 'third_party')
+    if not os.path.exists(third_party_dir):
+        os.mkdir(third_party_dir)
 
     for dep in deps:
         strs = dep.split(':')
@@ -59,7 +63,21 @@ def CMDsync(parser, args):
         target_cxx_modules_dir = os.path.join(cxx_modules_dir, name, arch)
         if not os.path.exists(target_cxx_modules_dir):
             os.makedirs(target_cxx_modules_dir)
-        vclient_utils.Unzip(cache_file, target_cxx_modules_dir)
+        vclient_utils.Unzip(cache_file, target_cxx_modules_dir, 'dist/')
+
+    for mod in third_party:
+        strs = mod.split('|')
+        url = strs[0]
+        ver = strs[1]
+        prefix = strs[2]
+        dist = strs[3]
+        cache_file = os.path.join(cache_dir, dist+'_'+ver+'.zip')
+        cache_file = vclient_utils.Download(
+            url, cache_file)
+        target_third_party_dir = os.path.join(third_party_dir, dist)
+        if not os.path.exists(target_third_party_dir):
+            os.makedirs(target_third_party_dir)
+        vclient_utils.Unzip(cache_file, target_third_party_dir, prefix)
 
     return 0
 
